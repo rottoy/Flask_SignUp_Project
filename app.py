@@ -49,8 +49,48 @@ def register():
 		
 		return "회원가입에 실패함! db에 들어가지 않음!"
 		#return redirect('/')
-		
+
+@app.route('/login', methods=['GET','POST'])
+def login():
+	if request.method=='GET':
+		return render_template('login.html')
+	else :
+		user_id = request.form['user_id']
+		user_password = request.form['user_password']
+		try:
+			with db.cursor() as cursor:
+				sql ="""SELECT * FROM userinformation.users where user_id='%s'; """ % (user_id)
+				cursor.execute(sql)
+				
+				data = cursor.fetchall()
+				print(data)
+				if len(data)>0:
+					if data[0][2]==user_password:
+						return redirect('/main')
+					else:
+						return render_template('error.html',error='Wrong password!')
+				else:
+					return render_template('error.html',error='아이디가 존재하지 않습니다!')
+			
+		except Exception as e:
+			db.close()
+			return render_template('error.html',error=str(e))
+
+		return "실패!"
+
+@app.route('/main')
+def main_page():
+	return render_template('main_page.html')
 
 if __name__ == "__main__":
 	app.run()
 	
+#TODO
+	#sql 질의로 response반환 - 성공
+	#파싱을 하는데 json으로 하는게 아니네? 이것도 나중에 알아보자.
+				
+	#사용자가 임의로 mainPage에 접근을 못하게 막아야함!
+
+	#try , finally안에서 return 하면 finally 실행안되지 않음? =>네!
+	#db를 언제 열고 언제 닫는게 좋습니까?
+	#받아온 데이터 형이tuple인데 어떻게 파싱합니끼?
