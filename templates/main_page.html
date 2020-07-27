@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html>
     <body>
-        <div>hello!</div>
-
+        <div>게시판</div>
+        <ul>
+                {% for board in boards %}
+                    <li>{{board}}</li>
+                {% endfor %}
+        </ul>
+        
     </body>
 
 </html>

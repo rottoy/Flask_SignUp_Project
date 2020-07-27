@@ -1,20 +1,31 @@
-from flask import Flask , render_template , request , redirect
+from flask import Flask
+from flask import render_template
+from flask import request
+from flask import redirect
+from flask import session
 import pymysql
+from datetime import datetime
 #flask를 구동 시키기 위한 어플리케이션 인스턴스 생성
 app = Flask(__name__)
 
+app.secret_key = 'i am preventing unauthorized user'
+
 #parameter 'db' : schema name
-db= pymysql.connect(host='localhost',
+
+
+
+def connect_mysql():
+	return pymysql.connect(host='localhost',
                      port=3306,
                      user='root',
                      passwd='401230',
                      db='userinformation',
                      charset='utf8')
-
+db= connect_mysql()
 
 @app.route("/")
 def hello():
-	return "hello world!"
+	return render_template('intro.html')
 
 @app.route("/register", methods=['GET','POST'])
 def register():
@@ -33,6 +44,7 @@ def register():
 			return "비밀번호가 일치하지 않습니다."
 		else:
 			try:
+				db= connect_mysql()
 				with db.cursor() as cursor:
 					sql= """INSERT INTO users(user_id, user_pwd,user_email)
          VALUES('%s', '%s','%s'); """ % (userid, userpassword,emailaddress) 
@@ -58,6 +70,7 @@ def login():
 		user_id = request.form['user_id']
 		user_password = request.form['user_password']
 		try:
+			db= connect_mysql()
 			with db.cursor() as cursor:
 				sql ="""SELECT * FROM userinformation.users where user_id='%s'; """ % (user_id)
 				cursor.execute(sql)
@@ -66,21 +79,45 @@ def login():
 				print(data)
 				if len(data)>0:
 					if data[0][2]==user_password:
+						session['users'] = user_id
 						return redirect('/main')
 					else:
 						return render_template('error.html',error='Wrong password!')
 				else:
 					return render_template('error.html',error='아이디가 존재하지 않습니다!')
-			
 		except Exception as e:
+			return render_template('error.html',error=str(e))	
+		finally:
 			db.close()
-			return render_template('error.html',error=str(e))
 
-		return "실패!"
+	return "실패!"
 
+#Session Needed URL
 @app.route('/main')
 def main_page():
-	return render_template('main_page.html')
+	if session.get('users'):
+		try:
+			db= connect_mysql()
+			with db.cursor() as cursor:
+				sql ="""SELECT SQL_NO_CACHE * FROM userinformation.boards;"""
+				
+				cursor.execute(sql)
+				boards=cursor.fetchall()
+				
+				cursor.close()
+				for board in boards:
+					print(str(board))
+				
+				return render_template('main_page.html', boards=boards)
+		except Exception as e:
+			return render_template('error.html',error=str(e))
+		finally:
+			db.close()
+		
+		
+	else:
+		return render_template('error.html',error='유효하지 않은 접근입니다.')
+
 
 if __name__ == "__main__":
 	app.run()
@@ -94,3 +131,5 @@ if __name__ == "__main__":
 	#try , finally안에서 return 하면 finally 실행안되지 않음? =>네!
 	#db를 언제 열고 언제 닫는게 좋습니까?
 	#받아온 데이터 형이tuple인데 어떻게 파싱합니끼?
+	#세션은 서버가 들고있는 스택같은 개념이군요?
+	#근데 서버가 꺼졌다 켜져도 세션이 유지되는 원리가 무엇인가요?
