@@ -3,39 +3,116 @@
     <head>
 
         <style>
+            html,body{
+                height: 100%;
+            }
+           
             .board_layout
             {
+                display: flex;
                 padding-top: 10px;
+                height: 100%;
+                margin: 20px;
+                margin-bottom:0px;
             }
             .board_sidebar{
-                float: left;
+                flex-grow: 1;
                 top: 0;
                 left: 0;
                 border: 1px solid #bcbcbc;
-                width: 10vw;
+                width: 180px;
                 height: 100%;
-                display: block;
+                padding-top: 20px;
+                padding-left: 20px;
+                overflow: hidden;
+                font-size: 14px;
             }
             .board_frame
             {
-                display: block;
-                float:left;
+                
+                flex-direction: column;
+                border: 1px solid #bcbcbc;
+                margin-left:20px;
+                flex-grow: 3;
+                height: 100%;        
             }
+            .board_header
+            {
+                margin: 20px;
+                border: 1px solid #bcbcbc;
+                padding : 20px;
+                text-align: center;
+                
+            }
+            .board_content
+            {
+                margin-bottom:0px;
+                margin: 20px;
+                padding : 20px;
+               
+                border: 1px solid #bcbcbc;
+            }
+            .board_content table
+            {
+                
+                table-layout: fixed;
+                
+            }
+            .board_content table>tbody>tr:hover
+            {
+                text-decoration: underline;
+                cursor : pointer;
+            }
+
         </style>
     </head>
     <body>
-        <div class='board_layout'>
+        <div class='board_layout' >
             <div class=board_sidebar>
+               유저 회원 정보(user table 알고있어야함)
+               <p>이름(float:left) rottoy(float:right)</p>
+               <p>이메일(float:left) wnsgur9609@naver.com(float:right)</p>
+               <p>작성한 게시물 수 x회</p>
+               <p>작성한 댓글 수 y회</p>
             </div>
-            <div class=board_frame 
-            style="background: red; width: 984px;"
-            
-            >
+            <div class=board_frame >
+           
+            <div class=board_header>
+                <h4>재밌는 html 공부 게시판!</h4>
+            </div>
+            <div class=board_content>
                 <table>
                     <colgroup>
-                    
+                     <col width="128px" />
+                     <col width="460px">
+                     <col width="98px" />
+                     <col width="98px" />
                     </colgroup>
-                    <tbody>
+                   <tbody>
+                       
+                       <tr>
+                           <th>말머리</th> <th>제목</th> <th>작성자</th> <th>작성일</th>
+                       </tr>
+                       {% for board in boards %}
+                       <tr>
+                               <td>{{board[0]}}</td>
+                               <td>{{board[1]}}</td>
+                               <td>{{board[2]}}</td>
+                               <td>{{board[3]}}</td>
+                       </tr>
+                       {% endfor %}
+                       </tbody>
+                   </tbody>
+                </table>
+            </div>
+              
+            </div>
+
+    </body>
+
+</html>
+<!--
+ <tbody>
                     {% for board in boards %}
                     <tr>
                         {% for attribute in board %}
@@ -44,9 +121,4 @@
                     </tr>
                     {% endfor %}
                     </tbody>
-                </table>
-            </div>
-
-    </body>
-
-</html>
+-->
