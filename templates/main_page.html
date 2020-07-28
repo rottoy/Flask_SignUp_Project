@@ -1,70 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-
-        <style>
-            html,body{
-                height: 100%;
-            }
-           
-            .board_layout
-            {
-                display: flex;
-                padding-top: 10px;
-                height: 100%;
-                margin: 20px;
-                margin-bottom:0px;
-            }
-            .board_sidebar{
-                flex-grow: 1;
-                top: 0;
-                left: 0;
-                border: 1px solid #bcbcbc;
-                width: 180px;
-                height: 100%;
-                padding-top: 20px;
-                padding-left: 20px;
-                overflow: hidden;
-                font-size: 14px;
-            }
-            .board_frame
-            {
-                
-                flex-direction: column;
-                border: 1px solid #bcbcbc;
-                margin-left:20px;
-                flex-grow: 3;
-                height: 100%;        
-            }
-            .board_header
-            {
-                margin: 20px;
-                border: 1px solid #bcbcbc;
-                padding : 20px;
-                text-align: center;
-                
-            }
-            .board_content
-            {
-                margin-bottom:0px;
-                margin: 20px;
-                padding : 20px;
-               
-                border: 1px solid #bcbcbc;
-            }
-            .board_content table
-            {
-                
-                table-layout: fixed;
-                
-            }
-            .board_content table>tbody>tr:hover
-            {
-                text-decoration: underline;
-                cursor : pointer;
-            }
-
-        </style>
+    <meta charset="UTF-8">
+     <title>게시판</title>
     </head>
     <body>
         <div class='board_layout' >
@@ -121,4 +59,11 @@
                     </tr>
                     {% endfor %}
                     </tbody>
+
+새로운 페이지를 렌더링 하기로 했으므로,
+main_page.html을 부르되, 
+
+board_content 의 display : none으로 설정
+board_post 의 display :visible? 으로 설정
+
 -->
