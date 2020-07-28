@@ -99,7 +99,7 @@ def main_page():
 		try:
 			db= connect_mysql()
 			with db.cursor() as cursor:
-				sql ="""SELECT SQL_NO_CACHE * FROM userinformation.boards;"""
+				sql ="""SELECT SQL_NO_CACHE board_title, board_contents, board_writer FROM userinformation.boards;"""
 				
 				cursor.execute(sql)
 				boards=cursor.fetchall()
@@ -133,3 +133,8 @@ if __name__ == "__main__":
 	#받아온 데이터 형이tuple인데 어떻게 파싱합니끼?
 	#세션은 서버가 들고있는 스택같은 개념이군요?
 	#근데 서버가 꺼졌다 켜져도 세션이 유지되는 원리가 무엇인가요?
+	
+	#html에 있는 {{}} 라던가 {% for %} 이런 문법은 어디에서 나오는 것인가요?
+	#서버와 클라이언트 간은 form으로 데이터를 교환해서 파싱하기가 쉬운데,
+	#데이터베이스에서 데이터를 파싱하려면 그냥 [0][1] 이렇게 요소 인덱스로 파싱해야되나요? 너무 주먹구구인데
+

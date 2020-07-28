@@ -1,13 +1,52 @@
 <!DOCTYPE html>
 <html>
+    <head>
+
+        <style>
+            .board_layout
+            {
+                padding-top: 10px;
+            }
+            .board_sidebar{
+                float: left;
+                top: 0;
+                left: 0;
+                border: 1px solid #bcbcbc;
+                width: 10vw;
+                height: 100%;
+                display: block;
+            }
+            .board_frame
+            {
+                display: block;
+                float:left;
+            }
+        </style>
+    </head>
     <body>
-        <div>게시판</div>
-        <ul>
-                {% for board in boards %}
-                    <li>{{board}}</li>
-                {% endfor %}
-        </ul>
-        
+        <div class='board_layout'>
+            <div class=board_sidebar>
+            </div>
+            <div class=board_frame 
+            style="background: red; width: 984px;"
+            
+            >
+                <table>
+                    <colgroup>
+                    
+                    </colgroup>
+                    <tbody>
+                    {% for board in boards %}
+                    <tr>
+                        {% for attribute in board %}
+                            <td>{{attribute}}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
     </body>
 
 </html>
