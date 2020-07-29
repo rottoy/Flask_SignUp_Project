@@ -3,10 +3,11 @@
     <head>
     <meta charset="UTF-8">
      <title>게시판</title>
-     <link rel="stylesheet" href="{{ url_for('static', filename='main_page.css') }}">
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/main_page.css') }}">
     </head>
     <body>
-        <div class='board_layout' >
+        <div class='board_layout'>
+
             <div class=board_sidebar>
                유저 회원 정보(user table 알고있어야함)
                <p>이름(float:left) rottoy(float:right)</p>
@@ -14,39 +15,67 @@
                <p>작성한 게시물 수 x회</p>
                <p>작성한 댓글 수 y회</p>
             </div>
-            <div class=board_frame >
-           
-            <div class=board_header>
-                <h4>재밌는 html 공부 게시판!</h4>
-            </div>
-            <div class=board_content>
-                <table>
-                    <colgroup>
-                     <col width="128px" />
-                     <col width="460px">
-                     <col width="98px" />
-                     <col width="98px" />
-                    </colgroup>
-                   <tbody>
-                       
-                       <tr>
-                           <th>말머리</th> <th>제목</th> <th>작성자</th> <th>작성일</th>
-                       </tr>
-                       {% for board in boards %}
-                       <tr>
-                               <td>{{board[0]}}</td>
-                               <td>{{board[1]}}</td>
-                               <td>{{board[2]}}</td>
-                               <td>{{board[3]}}</td>
-                       </tr>
-                       {% endfor %}
-                       </tbody>
-                   </tbody>
-                </table>
-            </div>
-              
-            </div>
 
+            <div class=board_frame>
+                
+                <div class=frame_header>
+                    <h4>재밌는 html 공부 게시판!</h4>
+                </div>
+
+                <div class=frame_content>
+                    {% if details=="none" %}
+                    <table>
+                        <colgroup>
+                        <col width="128px" />
+                        <col width="460px">
+                        <col width="98px" />
+                        <col width="98px" />
+                        </colgroup>
+                    <tbody>
+                        
+                        <tr>
+                            <th>말머리</th> <th>제목</th> <th>작성자</th> <th>작성일</th>
+                        </tr>
+                        
+                        {% for board in boards %}
+                        
+                        <tr>
+                                <td>{{board[0]}}</td>
+                                <td><a href="{{ url_for('board_page', index=board[0])}}">{{board[1]}}</a></td>
+                                <td>{{board[3]}}</td>
+                                <td>{{board[4]}}</td>
+                        </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                    </table>
+                
+
+                    {% elif details=="read" %}
+                    <div class=content_header>
+                        <p><a href=# id='content_writer' stype="display : inline;">작성자 : {{boards[0][3]}}</a>
+                            <div style="display: inline;">작성일 : {{boards[0][4]}}</div> <div style="display: inline; float: right;">조회수 : </div>
+                        </p>
+                       
+                    </div>
+                    <div class=content_posting>
+                        <h4>{{boards[0][1]}}</h4>
+                        <br>
+                        <p>{{boards[0][2]}}</p>
+                    </div>
+                    <div class=content_bottom>
+                        <a href="{{url_for('write_page')}}">글쓰기</a><a href="{{url_for('main_page')}}" style="float: right;">뒤로 가기</a>
+                    </div>
+                    {% elif details=="write" %}
+                    <div class=content_bottom>
+                        <a href="{{url_for('write_page')}}">글쓰기</a><a href="{{url_for('main_page')}}" style="float: right;">뒤로 가기</a>
+                    </div>
+                    {% endif %}
+                   
+                  
+               </div>
+            </div>
+        </div>
     </body>
 
 </html>
@@ -66,5 +95,37 @@ main_page.html을 부르되,
 
 board_content 의 display : none으로 설정
 board_post 의 display :visible? 으로 설정
+{% if details==False %}
+                    <table>
+                        <colgroup>
+                        <col width="128px" />
+                        <col width="460px">
+                        <col width="98px" />
+                        <col width="98px" />
+                        </colgroup>
+                    <tbody>
+                        
+                        <tr>
+                            <th>말머리</th> <th>제목</th> <th>작성자</th> <th>작성일</th>
+                        </tr>
+                        
+                        {% for board in boards %}
+                        
+                        <tr>
+                                <td>{{board[0]}}</td>
+                                <td><a href="{{ url_for('board_page', index=board[0])}}">{{board[1]}}</a></td>
+                                <td>{{board[3]}}</td>
+                                <td>{{board[4]}}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </tbody>
+                    </table>
+                
 
+                    {% else %}
+                    
+                    <h3>안녕하세요 상세 게시물 패널입니다.</h3>
+                    {{boards[0][2]}}
+                    {% endif %}
 -->

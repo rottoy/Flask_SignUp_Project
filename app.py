@@ -3,6 +3,7 @@ from flask import render_template
 from flask import request
 from flask import redirect
 from flask import session
+from flask import url_for
 import pymysql
 from datetime import datetime
 #flask를 구동 시키기 위한 어플리케이션 인스턴스 생성
@@ -99,7 +100,7 @@ def main_page():
 		try:
 			db= connect_mysql()
 			with db.cursor() as cursor:
-				sql ="""SELECT SQL_NO_CACHE board_title, board_contents, board_writer, board_writtentime FROM userinformation.boards;"""
+				sql ="""SELECT * FROM userinformation.boards;"""
 				
 				cursor.execute(sql)
 				boards=cursor.fetchall()
@@ -108,8 +109,9 @@ def main_page():
 				for board in boards:
 					print(str(board))
 				
-				return render_template('main_page.html', boards=boards)
+				return render_template('main_page.html', boards=boards, details="none")
 		except Exception as e:
+			print("오류 발생1")
 			return render_template('error.html',error=str(e))
 		finally:
 			db.close()
@@ -119,7 +121,55 @@ def main_page():
 		return render_template('error.html',error='유효하지 않은 접근입니다.')
 
 
+@app.route('/main/<index>')
+def board_page(index):
+	if session.get('users'):
+		try:
+			db= connect_mysql()
+			with db.cursor() as cursor:
+				sql ="""SELECT  * FROM userinformation.boards where board_idx='%s';""" % (index)
+				cursor.execute(sql)
+				boards=cursor.fetchall()
+				
 
+				cursor.close()
+				for board in boards:
+					print(str(board))
+				
+				return render_template('main_page.html', boards=boards,details="read")
+		except Exception as e:
+			return render_template('error.html',error=str(e))
+		finally:
+			db.close()
+		
+		
+	else:
+		return render_template('error.html',error='유효하지 않은 접근입니다.')
+
+@app.route('/main/write_page')
+def write_page():
+	if session.get('users'):
+		try:
+			db= connect_mysql()
+			with db.cursor() as cursor:
+				sql ="""SELECT SQL_NO_CACHE * FROM userinformation.boards;"""
+
+				cursor.execute(sql)
+				boards=cursor.fetchall()
+				
+				cursor.close()
+				for board in boards:
+					print(str(board))
+				
+				return render_template('main_page.html', boards=boards,details="write")
+		except Exception as e:
+			return render_template('error.html',error=str(e))
+		finally:
+			db.close()
+		
+		
+	else:
+		return render_template('error.html',error='유효하지 않은 접근입니다.')
 if __name__ == "__main__":
 	app.run()
 	
