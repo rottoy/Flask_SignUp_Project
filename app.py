@@ -101,11 +101,24 @@ def main_page():
 		try:
 			db= connect_mysql()
 			with db.cursor() as cursor:
-				if request.methods =='POST':
-					content_title = request.form['content_title']
-					content_textarea = request.form['content_textarea']
+				if request.method =='POST':
+					
+					content_title = request.form.get('content_title')
+					content_textarea = request.form.get('content_textarea')
+					print(content_title)
+					print(content_textarea)
+					sql ="""INSERT INTO boards(board_title,board_contents,board_writer,board_writtentime)
+							VALUES('%s','%s','%s','%s')""" % (content_title,
+							content_textarea,
+							str(session.get('users')),
+							str(datetime.today().strftime('%Y/%m/%d %H:%M:%S')))
+					cursor.execute(sql)
+					
 				#update boards
-					sql ="""SELECT * FROM userinformation.boards;"""
+				#create boards
+					#sql ="""UPDATE userinformation.boards
+					#SET board_title='%s', board_contents="%s"
+					#where board_idx='%s';""" % (content_title,content_textarea,1)
 
 				#read boards
 				sql ="""SELECT * FROM userinformation.boards;"""
