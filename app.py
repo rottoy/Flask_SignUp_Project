@@ -94,12 +94,20 @@ def login():
 	return "실패!"
 
 #Session Needed URL
-@app.route('/main')
+@app.route('/main', methods=['GET','POST'])
 def main_page():
 	if session.get('users'):
+
 		try:
 			db= connect_mysql()
 			with db.cursor() as cursor:
+				if request.methods =='POST':
+					content_title = request.form['content_title']
+					content_textarea = request.form['content_textarea']
+				#update boards
+					sql ="""SELECT * FROM userinformation.boards;"""
+
+				#read boards
 				sql ="""SELECT * FROM userinformation.boards;"""
 				
 				cursor.execute(sql)
@@ -111,7 +119,6 @@ def main_page():
 				
 				return render_template('main_page.html', boards=boards, details="none")
 		except Exception as e:
-			print("오류 발생1")
 			return render_template('error.html',error=str(e))
 		finally:
 			db.close()
@@ -133,10 +140,13 @@ def board_page(index):
 				
 
 				cursor.close()
-				for board in boards:
-					print(str(board))
+				if boards[0][3] == session['users'] : 
+					return render_template('main_page.html', boards=boards,details="readAndUpdate")
+				else :
+					return render_template('main_page.html', boards=boards,details="read")
 				
-				return render_template('main_page.html', boards=boards,details="read")
+				
+					
 		except Exception as e:
 			return render_template('error.html',error=str(e))
 		finally:
@@ -149,17 +159,37 @@ def board_page(index):
 @app.route('/main/write_page')
 def write_page():
 	if session.get('users'):
+		#no need sql 
 		try:
 			db= connect_mysql()
 			with db.cursor() as cursor:
+				#board_writer , board_title, board_contents need
 				sql ="""SELECT SQL_NO_CACHE * FROM userinformation.boards;"""
 
 				cursor.execute(sql)
 				boards=cursor.fetchall()
-				
 				cursor.close()
-				for board in boards:
-					print(str(board))
+				
+				return render_template('main_page.html', boards=boards,details="write")
+		except Exception as e:
+			return render_template('error.html',error=str(e))
+		finally:
+			db.close()
+	else:
+		return render_template('error.html',error='유효하지 않은 접근입니다.')
+
+@app.route('/main/write_page/<int:index>')
+def update_page(index):
+	if session.get('users'):
+		try:
+			db= connect_mysql()
+			with db.cursor() as cursor:
+				#board_writer , board_title, board_contents need
+				sql ="""SELECT SQL_NO_CACHE * FROM userinformation.boards where board_idx='$s';""" % (index)
+
+				cursor.execute(sql)
+				boards=cursor.fetchall()
+				cursor.close()
 				
 				return render_template('main_page.html', boards=boards,details="write")
 		except Exception as e:
@@ -170,6 +200,7 @@ def write_page():
 		
 	else:
 		return render_template('error.html',error='유효하지 않은 접근입니다.')
+
 if __name__ == "__main__":
 	app.run()
 	

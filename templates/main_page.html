@@ -53,6 +53,7 @@
                         <a href="{{url_for('write_page')}}">글쓰기</a>
                     </div>
 
+
                     {% elif details=="read" %}
                     <div class=content_header>
                         <p><a href=# id='content_writer' stype="display : inline;">작성자 : {{boards[0][3]}}</a>
@@ -68,16 +69,43 @@
                     <div class=content_bottom>
                         <a href="{{url_for('write_page')}}">글쓰기</a><a href="{{url_for('main_page')}}" style="float: right;">뒤로 가기</a>
                     </div>
-                    {% elif details=="write" %}
-                    <textarea id="content_textarea"></textarea>
+
+
+                    {% elif details=="readAndUpdate" %}
+                    <div class=content_header>
+                        <p><a href=# id='content_writer' stype="display : inline;">작성자 : {{boards[0][3]}}</a>
+                            <div style="display: inline;">작성일 : {{boards[0][4]}}</div> <div style="display: inline; float: right;">조회수 : </div>
+                        </p>
+                       
+                    </div>
                     <div class=content_posting>
                         <h4>{{boards[0][1]}}</h4>
                         <br>
                         <p>{{boards[0][2]}}</p>
                     </div>
                     <div class=content_bottom>
+                        <a href="{{url_for('write_page')}}">글쓰기</a>
+                        &nbsp;&nbsp;&nbsp;
+                        <a href="{{url_for('write_page' , index=boards[0][0])}}">수정</a>
                         <a href="{{url_for('main_page')}}" style="float: right;">뒤로 가기</a>
                     </div>
+
+
+                    {% elif details=="write" %}
+                    <form id='update_form' action="{{url_for('main_page')}}", method="POST">
+                        <div class=content_title>
+                            <p>제목</p>
+                            <input type=text id='content_title' name='content_title'>
+                        </div>
+                        
+                        
+                        <textarea id="content_textarea" name='content_textarea'></textarea>
+                    
+                        <div class=content_bottom>
+                            <a href="javascript:;" onclick="document.getElementById('update_form').submit();">작성 완료</a>
+                            <a href="{{url_for('main_page')}}" style="float: right;">뒤로 가기</a>
+                        </div>
+                    </form>
                     {% endif %}
                    
                   
