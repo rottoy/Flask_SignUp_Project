@@ -99,7 +99,7 @@ def main_page():
 		try:
 			db= connect_mysql()
 			with db.cursor() as cursor:
-				sql ="""SELECT SQL_NO_CACHE board_title, board_contents, board_writer FROM userinformation.boards;"""
+				sql ="""SELECT SQL_NO_CACHE board_title, board_contents, board_writer, board_writtentime FROM userinformation.boards;"""
 				
 				cursor.execute(sql)
 				boards=cursor.fetchall()
@@ -117,6 +117,7 @@ def main_page():
 		
 	else:
 		return render_template('error.html',error='유효하지 않은 접근입니다.')
+
 
 
 if __name__ == "__main__":
