@@ -112,6 +112,7 @@
                             onclick="
                                 var form = document.getElementById('update_form');
                                 var hiddenIndex = document.createElement('input');
+                                hiddenIndex.type = '';
                                 hiddenIndex.setAttribute('type', 'hidden');
                                 hiddenIndex.setAttribute('name', 'content_idx');
                                 hiddenIndex.setAttribute('value', '{{boards[0][0]}}' );
@@ -120,6 +121,7 @@
                              ">작성 완료</a>
                             <a href="{{url_for('main_page')}}" style="float: right;">뒤로 가기</a>
                         </div>
+                        <input type="hidden" name='content_idx'/>
                     </form>
                   
                     {% endif %}
