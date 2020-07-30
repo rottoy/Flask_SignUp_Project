@@ -19,7 +19,7 @@ def connect_mysql():
 	return pymysql.connect(host='localhost',
                      port=3306,
                      user='root',
-                     passwd='401230',
+                     passwd='111111',
                      db='userinformation',
                      charset='utf8')
 db= connect_mysql()
@@ -132,6 +132,7 @@ def main_page():
 				
 				return render_template('main_page.html', boards=boards, details="none")
 		except Exception as e:
+			print("hei")
 			return render_template('error.html',error=str(e))
 		finally:
 			db.close()
@@ -183,7 +184,7 @@ def write_page():
 				boards=cursor.fetchall()
 				cursor.close()
 				
-				return render_template('main_page.html', boards=boards,details="write")
+				return render_template('main_page.html', boards=boards,details="write" ,index=-1)
 		except Exception as e:
 			return render_template('error.html',error=str(e))
 		finally:
@@ -191,20 +192,22 @@ def write_page():
 	else:
 		return render_template('error.html',error='유효하지 않은 접근입니다.')
 
-@app.route('/main/write_page/<int:index>')
+@app.route('/main/write_page/<index>')
 def update_page(index):
 	if session.get('users'):
 		try:
+			
 			db= connect_mysql()
 			with db.cursor() as cursor:
 				#board_writer , board_title, board_contents need
-				sql ="""SELECT SQL_NO_CACHE * FROM userinformation.boards where board_idx='$s';""" % (index)
+				sql ="""SELECT SQL_NO_CACHE * FROM userinformation.boards where board_idx='%s';""" % (index)
 
 				cursor.execute(sql)
 				boards=cursor.fetchall()
 				cursor.close()
 				
-				return render_template('main_page.html', boards=boards,details="write")
+				# go to write page with data
+				return render_template('main_page.html', boards=boards,details="write", index=index) 
 		except Exception as e:
 			return render_template('error.html',error=str(e))
 		finally:
