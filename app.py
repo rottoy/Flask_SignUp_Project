@@ -102,23 +102,15 @@ def main_page():
 			db= connect_mysql()
 			with db.cursor() as cursor:
 				if request.method =='POST':
-					
+					#update boards
+					content_idx= request.form.get('content_idx')
 					content_title = request.form.get('content_title')
 					content_textarea = request.form.get('content_textarea')
-					print(content_title)
-					print(content_textarea)
-					sql ="""INSERT INTO boards(board_title,board_contents,board_writer,board_writtentime)
-							VALUES('%s','%s','%s','%s')""" % (content_title,
-							content_textarea,
-							str(session.get('users')),
-							str(datetime.today().strftime('%Y/%m/%d %H:%M:%S')))
+
+					sql ="""UPDATE userinformation.boards SET  board_title= '%s', board_contents='%s' WHERE board_idx = '%s';""" % (content_title,content_textarea,content_idx)
 					cursor.execute(sql)
-					
-				#update boards
-				#create boards
-					#sql ="""UPDATE userinformation.boards
-					#SET board_title='%s', board_contents="%s"
-					#where board_idx='%s';""" % (content_title,content_textarea,1)
+					db.commit()
+				
 
 				#read boards
 				sql ="""SELECT * FROM userinformation.boards;"""
@@ -217,6 +209,9 @@ def update_page(index):
 	else:
 		return render_template('error.html',error='유효하지 않은 접근입니다.')
 
+@app.route('/main/aa')
+def delete_page():
+	return render_template('main_page.html')
 if __name__ == "__main__":
 	app.run()
 	
@@ -237,4 +232,10 @@ if __name__ == "__main__":
 	#데이터베이스에서 데이터를 파싱하려면 그냥 [0][1] 이렇게 요소 인덱스로 파싱해야되나요? 너무 주먹구구인데
 
 	#내부에서 갱신하려면 백엔드가 아닌 프론트에서 작업해야 하는데, 이는 귀찮음.
-	
+
+	#첨부파일을 2개 까지만 할 수 있음
+"""
+					print(content_idx)
+					print(content_title)
+					print(content_textarea)
+"""

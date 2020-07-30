@@ -102,5 +102,5 @@ def board_select_unique(index):
 	    db.close()
     
 #create_table('boards')
-board_insert('제목123입니다','내용입12321323니다','wnsgur9609',str(datetime.today().strftime('%Y/%m/%d %H:%M:%S')))
-#user_insert('wnsgur9609','123','wnsgur9609@naver.com')
+board_insert('제목123입니다','내용입12321323니다','rottoy',str(datetime.today().strftime('%Y/%m/%d %H:%M:%S')))
+#user_insert('rottoy','123','wnsgur9609@naver.com')

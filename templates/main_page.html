@@ -87,6 +87,8 @@
                         <a href="{{url_for('write_page')}}">글쓰기</a>
                         &nbsp;&nbsp;&nbsp;
                         <a href="{{url_for('update_page' , index=boards[0][0] ) }}">수정</a>
+                        &nbsp;&nbsp;&nbsp;
+                        <a href="{{url_for('delete_page')}}">삭제</a>
                         <a href="{{url_for('main_page')}}" style="float: right;">뒤로 가기</a>
                     </div>
 
@@ -106,7 +108,16 @@
                         
                     
                         <div class=content_bottom>
-                            <a href="javascript:;" onclick="document.getElementById('update_form').submit();">작성 완료</a>
+                            <a href="javascript:;" 
+                            onclick="
+                                var form = document.getElementById('update_form');
+                                var hiddenIndex = document.createElement('input');
+                                hiddenIndex.setAttribute('type', 'hidden');
+                                hiddenIndex.setAttribute('name', 'content_idx');
+                                hiddenIndex.setAttribute('value', '{{boards[0][0]}}' );
+                                form.appendChild(hiddenIndex);
+                                form.submit();
+                             ">작성 완료</a>
                             <a href="{{url_for('main_page')}}" style="float: right;">뒤로 가기</a>
                         </div>
                     </form>
